@@ -5,7 +5,7 @@ if os.getuid() != 0:
 	sys.exit()
 
 os.popen('sudo noip2')
-background = os.path.join('/home/rock64/Pictures', random.choice(os.listdir('/home/rock64/Pictures/backgrounds')))
+background = os.path.join('/home/rock64/Pictures/backgrounds', random.choice(os.listdir('/home/rock64/Pictures/backgrounds')))
 command = 'feh --bg-fill ' + background
 os.popen(command)
 
