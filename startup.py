@@ -1,4 +1,4 @@
-import os, sys, random
+import os, sys, random, subprocess
 
 if os.getuid() != 0:
 	print('Try again as root!')
