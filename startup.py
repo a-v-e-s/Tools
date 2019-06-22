@@ -15,4 +15,12 @@ if '/usr/lib/xorg/Xorg' in subprocess.getoutput('ps -aux | grep Xorg'):
 	command = 'feh --bg-fill ' + background
 	os.popen(command)
 	
+
+if input('\nStart nfs server? [y/n]\n').lower() == 'y':
+	print('\nSyncing home directory with nfs directory...\n')
+	os.chdir('/home/rock64')
+	os.popen('sudo rsync -aAv --delete --exclude=.cache /home/rock64 /srv/nfs')
+	print('\nDone syncing...\n')
+	os.popen('sudo systemctl start nfs-kernel-server')
+	
 print('Done!')
