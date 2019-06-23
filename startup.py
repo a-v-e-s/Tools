@@ -1,9 +1,12 @@
+#!/usr/local/bin/python3
+
 import os, sys, random, subprocess
 
 if os.getuid() != 0:
 	print('Try again as root!')
 	sys.exit()
 
+os.popen('sudo ifconfig eth0 192.168.1.4')
 os.popen('sudo noip2')
 os.popen('sudo mount -t ext4 /dev/mmcblk1p1 /srv/ftp')
 
