@@ -44,10 +44,6 @@ def start_rock64():
 
 
 	if input('\nStart nfs server for home directory? [y/n]\n').lower() == 'y':
-		print('\nSyncing home directory with nfs directory...\n')
-		os.chdir('/home/rock64')
-		os.popen('sudo rsync -aAv --delete --exclude=.cache /home/rock64 /srv/nfs')
-		print('\nDone syncing...\n')
 		os.popen('sudo systemctl start nfs-kernel-server')
 	"""
 	for x in os.listdir('/home/rock64/Repos'):
