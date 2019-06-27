@@ -9,9 +9,10 @@ if os.getuid() != 0:
 	sys.exit()
 
 with open('/etc/hostname', 'r') as host:
-	if 'blacktop' in host.readline():
+	name = host.readline()
+	if 'blacktop' in name:
 		start_blacktop()
-	elif 'rock64' in host.readline():
+	elif 'rock64' in name:
 		start_rock64()
 
 
@@ -22,7 +23,6 @@ def start_blacktop():
 	
 	vpn = input('\nStart VPN?\nEnter type: [udp/tcp]\n').lower()
 	if vpn == 'udp' or 'tcp':
-		protocol = (vpn)
 		threading.Thread(None, tunnel, args=(vpn,)).run()
 	"""
 	for x in os.listdir('/home/crowbar/Repos'):

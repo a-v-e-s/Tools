@@ -15,8 +15,8 @@ def pull(path, directory):
 				print('\nTried pulling from https://github.com/a-v-e-s/' + directory, 'but failed.')
 				print('Exeption info:')
 				print(sys.exc_info())
-            else:
-                print('git pull was successful for', directory)
+			else:
+				print('git pull was successful for', directory)
 			finally:
 				break
 		elif 'PRIVATE_FILE.txt' in os.listdir():
@@ -27,8 +27,8 @@ def pull(path, directory):
 				print('\nTried pulling from http://jondavid.ddns.net:/srv/git/' + directory, 'but failed.')
 				print('Exeption info:')
 				print(sys.exc_info())
-            else:
-                print('git pull was successful for', directory)
+			else:
+				print('git pull was successful for', directory)
 			finally:
 				break
 		else:
