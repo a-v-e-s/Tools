@@ -8,13 +8,6 @@ if os.getuid() != 0:
 	print('Try again as root!')
 	sys.exit()
 
-with open('/etc/hostname', 'r') as host:
-	name = host.readline()
-	if 'blacktop' in name:
-		start_blacktop()
-	elif 'rock64' in name:
-		start_rock64()
-
 
 def start_blacktop():
 	os.popen('sudo rfkill block bluetooth')
@@ -50,3 +43,11 @@ def start_rock64():
 		threading.Thread(None, pull, args=(os.path.join('/home/rock64/Repos', x), x)).run()
 	"""
 	print('Done!')
+
+
+with open('/etc/hostname', 'r') as host:
+	name = host.readline()
+	if 'blacktop' in name:
+		start_blacktop()
+	elif 'rock64' in name:
+		start_rock64()
