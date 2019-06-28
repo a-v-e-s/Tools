@@ -8,9 +8,9 @@ def pull(path, directory):
 	attempt = 1
 	while attempt < 3:
 		if 'LICENSE.md' in os.listdir():
-			command = 'git pull --repo=https://github.com/a-v-e-s/' + directory
+			command = 'git pull https://github.com/a-v-e-s/' + directory
 			try:
-				os.popen(command)
+				os.system(command)
 			except Exception:
 				print('\nTried pulling from https://github.com/a-v-e-s/' + directory, 'but failed.')
 				print('Exeption info:')
@@ -20,9 +20,9 @@ def pull(path, directory):
 			finally:
 				break
 		elif 'PRIVATE_FILE.txt' in os.listdir():
-			command = 'git pull --repo=http://jondavid.ddns.net:/srv/git/' + directory
+			command = 'git pull http://jondavid.ddns.net:/srv/git/' + directory
 			try:
-				os.popen(command)
+				os.system(command)
 			except Exception:
 				print('\nTried pulling from http://jondavid.ddns.net:/srv/git/' + directory, 'but failed.')
 				print('Exeption info:')
@@ -32,7 +32,7 @@ def pull(path, directory):
 			finally:
 				break
 		else:
-			os.popen('git checkout master')
+			os.system('git checkout master')
 			attempt += 1
 
 

@@ -17,10 +17,10 @@ def start_blacktop():
 	vpn = input('\nStart VPN?\nEnter type: [udp/tcp]\n').lower()
 	if vpn == 'udp' or 'tcp':
 		threading.Thread(None, tunnel, args=(vpn,)).run()
-	"""
+	
 	for x in os.listdir('/home/crowbar/Repos'):
 		threading.Thread(None, pull, args=(os.path.join('/home/crowbar/Repos', x), x)).run()
-	"""
+	
 
 
 def start_rock64():
@@ -38,10 +38,10 @@ def start_rock64():
 
 	if input('\nStart nfs server for home directory? [y/n]\n').lower() == 'y':
 		os.popen('sudo systemctl start nfs-kernel-server')
-	"""
+	
 	for x in os.listdir('/home/rock64/Repos'):
 		threading.Thread(None, pull, args=(os.path.join('/home/rock64/Repos', x), x)).run()
-	"""
+	
 	print('Done!')
 
 
