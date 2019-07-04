@@ -2,6 +2,8 @@
 
 import os, sys
 
+# this needs to be made smarter and safer in the future.
+# just running pull for everything may overwrite changes that have been made locally.
 def pull(path, directory):
 	os.chdir(path)
 

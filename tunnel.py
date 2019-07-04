@@ -2,8 +2,8 @@
 
 import os, sys
 
-def tunnel(protocol):
-	os.chdir('/home/crowbar/CyberGhost/us-' + protocol)
+def tunnel(country, protocol):
+	os.chdir('/home/crowbar/CyberGhost/' + country + '-' + protocol)
 	try:
 		os.popen('sudo openvpn openvpn.ovpn')
 	except Exception:
@@ -12,4 +12,4 @@ def tunnel(protocol):
 
 
 if __name__ == '__main__':
-    tunnel('udp')
+    tunnel('us', 'udp')

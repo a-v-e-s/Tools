@@ -11,12 +11,14 @@ if os.getuid() != 0:
 
 def start_blacktop():
 	os.popen('sudo rfkill block bluetooth')
+	os.popen('rm -r --interactive=never /home/crowbar/.cache/thumbnails')
 	if input('\nAirplane mode? [y/n]\n').lower() == 'y':
 		os.popen('sudo rfkill block wifi')
 	
-	vpn = input('\nStart VPN?\nEnter type: [udp/tcp]\n').lower()
-	if vpn == 'udp' or 'tcp':
-		threading.Thread(None, tunnel, args=(vpn,)).run()
+	protocol = input('\nStart VPN?\nEnter type: [udp/tcp]\n').lower()
+	if protocol == 'udp' or 'tcp':
+		country = input('\nEnter country (e.g. us/nam):\n').lower()
+		threading.Thread(None, tunnel, args=(country, protocol)).run()
 	
 	for x in os.listdir('/home/crowbar/Repos'):
 		threading.Thread(None, pull, args=(os.path.join('/home/crowbar/Repos', x), x)).run()
