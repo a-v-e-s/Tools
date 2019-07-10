@@ -22,11 +22,11 @@ def pull(path, directory):
 			finally:
 				break
 		elif 'PRIVATE_FILE.txt' in os.listdir():
-			command = 'git pull http://jondavid.ddns.net:/srv/git/' + directory
+			command = 'git pull rock64@jondavid.ddns.net:/srv/git/' + directory
 			try:
 				os.system(command)
 			except Exception:
-				print('\nTried pulling from http://jondavid.ddns.net:/srv/git/' + directory, 'but failed.')
+				print('\nTried pulling from rock64@jondavid.ddns.net:/srv/git/' + directory, 'but failed.')
 				print('Exeption info:')
 				print(sys.exc_info())
 			else:
