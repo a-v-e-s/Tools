@@ -16,7 +16,7 @@ def start_blacktop():
 		os.popen('sudo rfkill block wifi')
 	
 	protocol = input('\nStart VPN?\nEnter type: [udp/tcp]\n').lower()
-	if protocol == 'udp' or 'tcp':
+	if protocol in ['udp', 'tcp']:
 		country = input('\nEnter country (e.g. us/nam):\n').lower()
 		threading.Thread(None, tunnel, args=(country, protocol)).run()
 	
