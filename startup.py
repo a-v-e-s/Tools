@@ -20,8 +20,8 @@ def start_blacktop():
 		country = input('\nEnter country (e.g. us/nam):\n').lower()
 		threading.Thread(None, tunnel, args=(country, protocol)).run()
 	
-	for x in os.listdir('/home/crowbar/Repos'):
-		threading.Thread(None, pull, args=(os.path.join('/home/crowbar/Repos', x), x)).run()
+#	for x in os.listdir('/home/crowbar/Repos'):
+#		threading.Thread(None, pull, args=(os.path.join('/home/crowbar/Repos', x), x)).run()
 	
 
 
@@ -41,8 +41,8 @@ def start_rock64():
 	if input('\nStart nfs server for home directory? [y/n]\n').lower() == 'y':
 		os.popen('sudo systemctl start nfs-kernel-server')
 	
-	for x in os.listdir('/home/rock64/Repos'):
-		threading.Thread(None, pull, args=(os.path.join('/home/rock64/Repos', x), x)).run()
+#	for x in os.listdir('/home/rock64/Repos'):
+#		threading.Thread(None, pull, args=(os.path.join('/home/rock64/Repos', x), x)).run()
 	
 	print('Done!')
 
