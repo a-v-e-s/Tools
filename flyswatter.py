@@ -32,6 +32,15 @@ def main(log):
 	for x in log:
 		if re.search('Failed password for', x):
 			failed_attempts.append(x)
+			continue
+		if re.search('Invalid user', x):
+			failed_attempts.append(x)
+			continue
+		if re.search('not allowed because not listed in AllowUsers', x):
+			failed_attempts.append(x)
+			continue
+		if re.search('Did not receive identification string from ', x):
+			failed_attempts.append(x)
 
 	ip_suspects = []
 	for x in failed_attempts:
@@ -70,8 +79,10 @@ def ip6(n):
 
 
 if len(sys.argv) == 1:
-	log = open('/var/log/auth.log', 'r', encoding='utf8')
-	main(log)
+	with open('/var/log/auth.log', 'r', encoding='utf8') as log:
+		main(log)
+	with open('/var/log/auth.log.1', 'r', encoding='utf8') as log:
+		main(log)
 elif len(sys.argv) > 1:
 	for x in sys.argv[1:]:
 		try:
