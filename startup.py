@@ -42,6 +42,10 @@ def start_rock64():
 		command = 'feh --bg-fill ' + background
 		os.popen(command)
 
+	if input('\nStart Owncloud? [y/n]\n').lower() == 'y':
+		os.popen('sudo a2ensite 4v3s')
+		os.popen('sudo systemctl reload apache2')
+		os.popen('sudo systemctl start mysql')
 
 	if input('\nStart nfs server for home directory? [y/n]\n').lower() == 'y':
 		os.popen('sudo systemctl start nfs-kernel-server')
