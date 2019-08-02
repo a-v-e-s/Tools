@@ -15,10 +15,15 @@ def start_blacktop():
 	if input('\nAirplane mode? [y/n]\n').lower() == 'y':
 		os.popen('sudo rfkill block wifi')
 	
-	protocol = input('\nStart VPN?\nEnter type: [udp/tcp]\n').lower()
+	protocol = input('\nStart VPN?\nEnter protocol: [udp/tcp]\n').lower()
 	if protocol in ['udp', 'tcp']:
 		country = input('\nEnter country (e.g. us/nam):\n').lower()
 		threading.Thread(None, tunnel, args=(country, protocol)).run()
+
+	if input('\nStart pydoc? [y/n]\n').lower() == 'y':
+		os.popen('pydoc3 -b')
+	if input('\nStart tutanota client? [y/n]\n').lower() == 'y':
+		os.popen('tuta')
 	
 #	for x in os.listdir('/home/crowbar/Repos'):
 #		threading.Thread(None, pull, args=(os.path.join('/home/crowbar/Repos', x), x)).run()
