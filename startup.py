@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 
 import os, sys, random, subprocess, threading
-from pull import pull
+#from pull import pull
 from tunnel import tunnel
 
 if os.getuid() != 0:
@@ -20,10 +20,11 @@ def start_blacktop():
 		country = input('\nEnter country (e.g. us/nam):\n').lower()
 		threading.Thread(None, tunnel, args=(country, protocol)).run()
 
-	if input('\nStart pydoc? [y/n]\n').lower() == 'y':
-		os.popen('pydoc3 -b')
-	if input('\nStart tutanota client? [y/n]\n').lower() == 'y':
-		os.popen('tuta')
+	# why don't these work??
+#	if input('\nStart pydoc? [y/n]\n').lower() == 'y':
+#		os.popen('pydoc3 -b')
+#	if input('\nStart tutanota client? [y/n]\n').lower() == 'y':
+#		os.popen('tuta')
 	
 #	for x in os.listdir('/home/crowbar/Repos'):
 #		threading.Thread(None, pull, args=(os.path.join('/home/crowbar/Repos', x), x)).run()
@@ -32,6 +33,7 @@ def start_blacktop():
 
 def start_rock64():
 	os.popen('sudo noip2')
+	os.popen('sudo a2dissite 4v3s')
 	os.popen('sudo mount -t ext4 /dev/mmcblk1p1 /srv/ftp')
 
 	if input('\nStart ssh server? [y/n]\n').lower() == 'y':
