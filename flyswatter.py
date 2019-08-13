@@ -49,7 +49,16 @@ def main(log):
 				ip_suspects.append(y)
 			elif ip6(y):
 				ip_suspects.append(y)
-
+	
+	just_me = []
+	for x in ip_suspects:
+		if x.startswith('192.168.1.'):
+			just_me.append(x)
+			print('\nFound myself!\n')
+	for x in just_me:
+		ip_suspects.remove(x)
+		print('Removed myself!\n')
+		
 	new_attackers = [ip for ip, count in collections.Counter(ip_suspects).items() if count > 4]
 	for x in new_attackers:
 		if x in ip_attackers:
@@ -106,6 +115,15 @@ def apache(log):
 				elif ip6(y):
 					suspects.append(y)
 
+	just_me = []
+	for x in suspects:
+		if x.startswith('192.168.1.'):
+			print('\nFound myself!\n')
+			just_me.append(x)
+	for x in just_me:
+		ip_suspects.remove(x)
+		print('Removed myself!\n')
+	
 	new_attackers = [ip for ip, count in collections.Counter(suspects).items() if count > 12]
 	for x in new_attackers:
 		if x in ip_attackers:
