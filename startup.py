@@ -2,7 +2,7 @@
 
 import os, sys, random, subprocess, threading
 #from pull import pull
-from tunnel import tunnel
+#from tunnel import tunnel
 
 if os.getuid() != 0:
 	print('Try again as root!')
@@ -15,10 +15,10 @@ def start_blacktop():
 	if input('\nAirplane mode? [y/n]\n').lower() == 'y':
 		os.popen('sudo rfkill block wifi')
 	
-	protocol = input('\nStart VPN?\nEnter protocol: [udp/tcp]\n').lower()
-	if protocol in ['udp', 'tcp']:
-		country = input('\nEnter country (e.g. us/nam):\n').lower()
-		threading.Thread(None, tunnel, args=(country, protocol)).run()
+#	protocol = input('\nStart VPN?\nEnter protocol: [udp/tcp]\n').lower()
+#	if protocol in ['udp', 'tcp']:
+#		country = input('\nEnter country (e.g. us/nam):\n').lower()
+#		threading.Thread(None, tunnel, args=(country, protocol)).run()
 
 	# why don't these work??
 #	if input('\nStart pydoc? [y/n]\n').lower() == 'y':

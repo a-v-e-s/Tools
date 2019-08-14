@@ -9,6 +9,7 @@ Written by: Jon David Tannehill
 """
 
 import os, sys, re, socket, collections
+import ip_tester
 global ip_attackers
 ip_attackers = []
 
@@ -19,7 +20,7 @@ elif input('Are you logged in as root? [y/n]\nSimply using sudo will not save th
 	sys.exit()
 
 
-def main(log):
+def auth(log):
 	global ip_attackers
 	rules = open('/etc/iptables/rules.v4', 'r')
 	for x in rules:
@@ -45,9 +46,9 @@ def main(log):
 	ip_suspects = []
 	for x in failed_attempts:
 		for y in x.split():
-			if ip4(y):
+			if ip_tester.ip4(y):
 				ip_suspects.append(y)
-			elif ip6(y):
+			elif ip_tester.ip6(y):
 				ip_suspects.append(y)
 	
 	just_me = []
@@ -69,22 +70,6 @@ def main(log):
 		command = 'iptables -I INPUT -s ' + x + ' -j DROP'
 		os.popen(command)
 		print(x, 'was blocked from gaining access to your computer!')
-
-
-def ip4(n):
-	try:
-		socket.inet_pton(socket.AF_INET, n)
-		return True
-	except socket.error:
-		return False
-
-		
-def ip6(n):
-	try:
-		socket.inet_pton(socket.AF_INET6, n)
-		return True
-	except socket.error:
-		return False
 		
 		
 def apache(log):
@@ -104,15 +89,15 @@ def apache(log):
 	suspects = []
 	for x in failed_attempts:
 		possible_ip = x.split()[0]
-		if ip4(possible_ip):
+		if ip_tester.ip4(possible_ip):
 			suspects.append(possible_ip)
-		elif ip6(possible_ip):
+		elif ip_tester.ip6(possible_ip):
 			suspects.append(possible_ip)
 		else:
 			for y in x.split()[1:]:
-				if ip4(y):
+				if ip_tester.ip4(y):
 					suspects.append(y)
-				elif ip6(y):
+				elif ip_tester.ip6(y):
 					suspects.append(y)
 
 	just_me = []
@@ -138,9 +123,9 @@ def apache(log):
 
 if len(sys.argv) == 1:
 	with open('/var/log/auth.log', 'r', encoding='utf8') as log:
-		main(log)
+		auth(log)
 	with open('/var/log/auth.log.1', 'r', encoding='utf8') as log:
-		main(log)
+		auth(log)
 	with open('/var/log/apache2/access.log', 'r', encoding='utf8') as log:
 		apache(log)
 	with open('/var/log/apache2/access.log.1', 'r', encoding='utf8') as log:
