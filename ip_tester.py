@@ -9,16 +9,16 @@ import socket
 
 
 def ip4(n):
-	try:
-		socket.inet_pton(socket.AF_INET, n)
-		return True
-	except socket.error:
-		return False
+    try:
+        socket.inet_pton(socket.AF_INET, n)
+        return True
+    except socket.error:
+        return False
 
-		
+
 def ip6(n):
-	try:
-		socket.inet_pton(socket.AF_INET6, n)
-		return True
-	except socket.error:
-		return False
+    try:
+        socket.inet_pton(socket.AF_INET6, n)
+        return True
+    except socket.error:
+        return False

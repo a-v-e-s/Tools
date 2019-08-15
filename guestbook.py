@@ -5,8 +5,8 @@ a report on it
 
 import pickle, re, sys
 import ip_tester
-    
-    
+
+
 def signin(logfile):
     try:
         with open('guestbook.pkl', 'rb') as guestbook:
@@ -17,7 +17,7 @@ def signin(logfile):
     except FileNotFoundError:
         print('\nNo guestbook found. We will create a new one.\n')
         guests = []
-    
+
     log = open(logfile, 'r')
     for x in log.readlines():
         if re.search(r'\s404\s', x):
@@ -34,7 +34,7 @@ def signin(logfile):
                         break
                     else:
                         guests.append(y)
-                        
+
     with open('guestbook.pkl', 'wb') as guestbook:
         pickle.dump(guests, guestbook)
 
