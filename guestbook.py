@@ -12,8 +12,10 @@ def signin(logfile):
         with open('guestbook.pkl', 'rb') as guestbook:
             guests = pickle.load(guestbook)
     except EOFError:
-        print('\nGuestbook empty. We will start fresh.\n')
-        guests = []
+        if input('\nGuestbook empty. Should we start fresh? [y/n]\n').lower() == 'y':
+            guests = []
+        else:
+            sys.exit()
     except FileNotFoundError:
         print('\nNo guestbook found. We will create a new one.\n')
         guests = []
@@ -34,6 +36,9 @@ def signin(logfile):
                         break
                     else:
                         guests.append(y)
+
+    with open('/var/www/html/number', 'w') as num:
+        num.write(str(len(guests)))
 
     with open('guestbook.pkl', 'wb') as guestbook:
         pickle.dump(guests, guestbook)
