@@ -32,6 +32,9 @@ def start_blacktop():
 
 def start_rock64():
     import guestbook
+    if os.getcwd() != '/home/rock64/Repos/Tools':
+        os.chdir('/home/rock64/Repos/Tools')
+
     os.popen('sudo noip2')
     os.popen('sudo a2dissite 4v3s')
     os.popen('sudo mount -t ext4 /dev/mmcblk1p1 /srv/ftp')
@@ -41,15 +44,14 @@ def start_rock64():
         mail = open('/var/mail/apache', 'rb').readlines()
         if len(mail) > 0:
             print("\nYou've got mail!")
-            envelope = os.open('/home/rock64/Documents/message', os.O_CREAT | os.O_WRONLY | os.O_APPEND)
+            envelope = os.open('/home/rock64/Mail/message', os.O_CREAT | os.O_WRONLY | os.O_APPEND)
             os.write(envelope, mail)
             os.close(envelope)
             mail.close()
             empty = open('/var/mail/apache', 'wb')
             empty.write(b'')
             empty.close()
-        else:
-            mail.close()
+        del mail
     except Exception:
         print('\nTried to deliver mail but failed. Exception info to follow:\n')
         print(sys.exc_info())
