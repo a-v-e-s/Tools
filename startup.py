@@ -88,6 +88,8 @@ def start_rock64():
             import flyswatter
             flyswatter.auth('/var/log/auth.log')
             flyswatter.apache('/var/log/apache2/access.log')
+            os.popen('iptables-save > /etc/iptables/rules.v4')
+            print('\nSuccess!\n')
         except Exception:
             print('\nFlyswatter feature failed! Exception info to follow:\n')
             print(sys.exc_info())

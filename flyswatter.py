@@ -121,7 +121,7 @@ def apache(log):
         print(x, 'was blocked from gaining access to your computer!')
 
 
-if len(sys.argv) == 1:
+if __name__ == '__main__':
     with open('/var/log/auth.log', 'r', encoding='utf8') as log:
         auth(log)
     with open('/var/log/auth.log.1', 'r', encoding='utf8') as log:
@@ -130,14 +130,5 @@ if len(sys.argv) == 1:
         apache(log)
     with open('/var/log/apache2/access.log.1', 'r', encoding='utf8') as log:
         apache(log)
-elif len(sys.argv) > 1:
-    for x in sys.argv[1:]:
-        try:
-            log = open(x, 'r', encoding='utf8')
-        except Exception:
-            print('Unable to open', x)
-            continue
-        main(log)
-
-os.popen('iptables-save > /etc/iptables/rules.v4')
-print('\nSuccess!\n')
+    os.popen('iptables-save > /etc/iptables/rules.v4')
+    print('\nSuccess!\n')
