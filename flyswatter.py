@@ -10,18 +10,10 @@ Written by: Jon David Tannehill
 
 import os, sys, re, socket, collections
 import ip_tester
-global ip_attackers
-ip_attackers = []
-
-if os.getuid() != 0:
-    print('Try again as root!')
-    sys.exit()
-elif input('Are you logged in as root? [y/n]\nSimply using sudo will not save the rules generated\n').lower() != 'y':
-    sys.exit()
 
 
 def auth(log):
-    global ip_attackers
+    ip_attackers = []
     rules = open('/etc/iptables/rules.v4', 'r')
     for x in rules:
         if re.search('DROP', x):
@@ -73,7 +65,7 @@ def auth(log):
 
 
 def apache(log):
-    global ip_attackers
+    ip_attackers = []
     rules = open('/etc/iptables/rules.v4', 'r')
     for x in rules:
         if re.search('DROP', x):
@@ -83,7 +75,7 @@ def apache(log):
 
     failed_attempts = []
     for x in log:
-        if re.search('.*(\.php).*(\s404\s)', x):
+        if re.search(r'.*(\.php).*(\s404\s)', x):
             failed_attempts.append(x)
 
     suspects = []
@@ -106,7 +98,7 @@ def apache(log):
             print('\nFound myself!\n')
             just_me.append(x)
     for x in just_me:
-        ip_suspects.remove(x)
+        suspects.remove(x)
         print('Removed myself!\n')
 
     new_attackers = [ip for ip, count in collections.Counter(suspects).items() if count > 12]
@@ -122,6 +114,12 @@ def apache(log):
 
 
 if __name__ == '__main__':
+    if os.getuid() != 0:
+        print('Try again as root!')
+        sys.exit()
+    elif input('Are you logged in as root? [y/n]\nSimply using sudo will not save the rules generated\n').lower() != 'y':
+        sys.exit()
+
     with open('/var/log/auth.log', 'r', encoding='utf8') as log:
         auth(log)
     with open('/var/log/auth.log.1', 'r', encoding='utf8') as log:

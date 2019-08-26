@@ -15,19 +15,19 @@ def start_blacktop():
     if input('\nAirplane mode? [y/n]\n').lower() == 'y':
         os.popen('sudo rfkill block wifi')
 
-    #protocol = input('\nStart VPN?\nEnter protocol: [udp/tcp]\n').lower()
-    #if protocol in ['udp', 'tcp']:
-        #country = input('\nEnter country (e.g. us/nam):\n').lower()
-        #threading.Thread(None, tunnel, args=(country, protocol)).run()
+    print('\nTrying new feature to mount internal drive on startup!\n')
+    if 'sda5' in subprocess.getoutput('ls /dev'):
+        os.popen('sudo mount /dev/sda4 /mnt/hdd')
+    elif 'sdb5' in subprocess.getoutput('ls /dev'):
+        os.popen('sudo mount /dev/sdb4 /mnt/hdd')
+    else:
+        print('\nCould not find and mount internal hard drive!\n')
 
     #why don't these work??
     #if input('\nStart pydoc? [y/n]\n').lower() == 'y':
         #os.popen('pydoc3 -b')
     #if input('\nStart tutanota client? [y/n]\n').lower() == 'y':
         #os.popen('tuta')
-
-    #for x in os.listdir('/home/crowbar/Repos'):
-        #threading.Thread(None, pull, args=(os.path.join('/home/crowbar/Repos', x), x)).run()
 
 
 def start_rock64():
@@ -93,9 +93,6 @@ def start_rock64():
         except Exception:
             print('\nFlyswatter feature failed! Exception info to follow:\n')
             print(sys.exc_info())
-
-    #for x in os.listdir('/home/rock64/Repos'):
-        #threading.Thread(None, pull, args=(os.path.join('/home/rock64/Repos', x), x)).run()
 
     print('Done!')
 
