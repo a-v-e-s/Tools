@@ -12,7 +12,7 @@ import os, sys, re, socket, collections
 import ip_tester
 
 
-def auth(log):
+def auth(log_):
     ip_attackers = []
     rules = open('/etc/iptables/rules.v4', 'r')
     for x in rules:
@@ -22,6 +22,7 @@ def auth(log):
                     ip_attackers.append(y[:-3])
 
     failed_attempts = []
+    log = open(log_, 'r', encoding='utf8')
     for x in log:
         if re.search('Failed password for', x):
             failed_attempts.append(x)
@@ -64,7 +65,7 @@ def auth(log):
         print(x, 'was blocked from gaining access to your computer!')
 
 
-def apache(log):
+def apache(log_):
     ip_attackers = []
     rules = open('/etc/iptables/rules.v4', 'r')
     for x in rules:
@@ -74,6 +75,7 @@ def apache(log):
                     ip_attackers.append(y[:-3])
 
     failed_attempts = []
+    log = open(log_, 'r', encoding='utf8')
     for x in log:
         if re.search(r'.*(\.php).*(\s404\s)', x):
             failed_attempts.append(x)
@@ -120,13 +122,10 @@ if __name__ == '__main__':
     elif input('Are you logged in as root? [y/n]\nSimply using sudo will not save the rules generated\n').lower() != 'y':
         sys.exit()
 
-    with open('/var/log/auth.log', 'r', encoding='utf8') as log:
-        auth(log)
-    with open('/var/log/auth.log.1', 'r', encoding='utf8') as log:
-        auth(log)
-    with open('/var/log/apache2/access.log', 'r', encoding='utf8') as log:
-        apache(log)
-    with open('/var/log/apache2/access.log.1', 'r', encoding='utf8') as log:
-        apache(log)
+    auth('/var/log/auth.log')
+    auth('/var/log/auth.log.1')
+    apache('/var/log/apache2/access.log')
+    apache('/var/log/apache2/access.log.1')
+
     os.popen('iptables-save > /etc/iptables/rules.v4')
     print('\nSuccess!\n')
