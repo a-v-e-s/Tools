@@ -15,13 +15,13 @@ def start_blacktop():
     if input('\nAirplane mode? [y/n]\n').lower() == 'y':
         os.popen('sudo rfkill block wifi')
 
-    print('\nTrying new feature to mount internal drive on startup!\n')
-    if 'sda5' in subprocess.getoutput('ls /dev'):
-        os.popen('sudo mount /dev/sda4 /mnt/hdd')
-    elif 'sdb5' in subprocess.getoutput('ls /dev'):
-        os.popen('sudo mount /dev/sdb4 /mnt/hdd')
-    else:
-        print('\nCould not find and mount internal hard drive!\n')
+    #print('\nTrying new feature to mount internal drive on startup!\n')
+    #if 'sda5' in subprocess.getoutput('ls /dev'):
+    #    os.popen('sudo mount /dev/sda4 /mnt/hdd')
+    #elif 'sdb5' in subprocess.getoutput('ls /dev'):
+    #    os.popen('sudo mount /dev/sdb4 /mnt/hdd')
+    #else:
+    #    print('\nCould not find and mount internal hard drive!\n')
 
     #why don't these work??
     #if input('\nStart pydoc? [y/n]\n').lower() == 'y':
@@ -93,8 +93,13 @@ def start_rock64():
         except Exception:
             print('\nFlyswatter feature failed! Exception info to follow:\n')
             print(sys.exc_info())
-
+            
     print('Done!')
+
+    os.popen('sudo iptables -A INPUT -s 222.186.0.0/16 -j DROP')
+    os.popen('sudo iptables -A INPUT -s 222.187.0.0/16 -j DROP')
+    os.popen('sudo iptables -A INPUT -s 218.98.0.0/16 -j DROP')
+    os.popen('sudo iptables -A INPUT -s 223.111.0.0/16 -j DROP')
 
 
 with open('/etc/hostname', 'r') as host:
