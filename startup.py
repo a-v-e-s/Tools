@@ -91,13 +91,14 @@ def start_rock64():
         except Exception:
             print('\nFlyswatter feature failed! Exception info to follow:\n')
             print(sys.exc_info())
-            
-    print('Done!')
+
 
     os.popen('sudo iptables -A INPUT -s 222.186.0.0/16 -j DROP')
     os.popen('sudo iptables -A INPUT -s 222.187.0.0/16 -j DROP')
     os.popen('sudo iptables -A INPUT -s 218.98.0.0/16 -j DROP')
     os.popen('sudo iptables -A INPUT -s 223.111.0.0/16 -j DROP')
+
+    print('Done!')
 
 
 with open('/etc/hostname', 'r') as host:

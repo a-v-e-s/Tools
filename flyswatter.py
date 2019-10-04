@@ -3,8 +3,6 @@ flyswatter.py: utilizes iptables to block ip addresses trying to gain
 unauthorized access, as indicated by attempting incorrect passwords 5
 or more times.
 
-Still under active development.
-
 Written by: Jon David Tannehill
 """
 
@@ -18,7 +16,7 @@ def auth(log_):
     for x in rules:
         if re.search('DROP', x):
             for y in x.split():
-                if re.search('/32', y):			# this needs to be made more widely applicable
+                if re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', y):
                     ip_attackers.append(y[:-3])
 
     failed_attempts = []
@@ -53,10 +51,13 @@ def auth(log_):
         ip_suspects.remove(x)
         print('Removed myself!\n')
 
+    already_blocked = []
     new_attackers = [ip for ip, count in collections.Counter(ip_suspects).items() if count > 4]
     for x in new_attackers:
         if x in ip_attackers:
-            new_attackers.remove(x)
+            already_blocked.append(x)
+    for x in already_blocked:
+        new_attackers.remove(x)
 
     print('Blocking attackers now...')
     for x in new_attackers:
@@ -71,7 +72,7 @@ def apache(log_):
     for x in rules:
         if re.search('DROP', x):
             for y in x.split():
-                if re.search('/32', y):			# this needs to be made more widely applicable
+                if re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', y):
                     ip_attackers.append(y[:-3])
 
     failed_attempts = []
@@ -103,10 +104,13 @@ def apache(log_):
         suspects.remove(x)
         print('Removed myself!\n')
 
+    already_blocked = []
     new_attackers = [ip for ip, count in collections.Counter(suspects).items() if count > 12]
     for x in new_attackers:
         if x in ip_attackers:
-            new_attackers.remove(x)
+            already_blocked.append(x)
+    for x in already_blocked:
+        new_attackers.remove(x)
 
     print('Blocking attackers now...')
     for x in new_attackers:
@@ -123,9 +127,12 @@ if __name__ == '__main__':
         sys.exit()
 
     auth('/var/log/auth.log')
-    auth('/var/log/auth.log.1')
-    apache('/var/log/apache2/access.log')
-    apache('/var/log/apache2/access.log.1')
-
     os.popen('iptables-save > /etc/iptables/rules.v4')
+    auth('/var/log/auth.log.1')
+    os.popen('iptables-save > /etc/iptables/rules.v4')
+    apache('/var/log/apache2/access.log')
+    os.popen('iptables-save > /etc/iptables/rules.v4')
+    apache('/var/log/apache2/access.log.1')
+    os.popen('iptables-save > /etc/iptables/rules.v4')
+
     print('\nSuccess!\n')
