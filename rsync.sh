@@ -8,16 +8,16 @@ if [ "$EUID" -ne 0 ]; then
 	exit
 fi
 
-# mount your server via nfs!
-# this doesn't work well.
-# mount -t ... takes too long and "&& break" doesn't exit the for loop for some reason.
-#for x in {64..253}; do
-#	address=192.168.1.$x:
-#	(mount -t nfs $address /mnt/nfs && break;)
-#done
+# mount rock64
+rock64=$(
+	sudo arp-scan --localnet | \
+	egrep "2a:90:45:d6:eb:3e" | \
+	cut -f 1
+)
+sudo mount -t nfs $rock64: /mnt/nfs
 
-#mount your internal (windows) hard drive!
-read sd < <(ls /dev | egrep sd[abcd]5)
+# mount your internal (windows) hard drive!
+read sd < <(ls /dev | egrep sd[abcd]4)
 hdd=/dev/$sd
 mount $hdd /mnt/hdd
 
