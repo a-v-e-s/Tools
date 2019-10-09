@@ -12,6 +12,8 @@ if os.getuid() != 0:
 def start_blacktop():
     os.popen('sudo rfkill block bluetooth')
     os.popen('rm -r --interactive=never /home/crowbar/.cache/thumbnails')
+    os.popen('echo '' > /home/crowbar/.bash_history')
+    os.popen('echo '' > /home/crowbar/.sqlite_history')
     if input('\nAirplane mode? [y/n]\n').lower() == 'y':
         os.popen('sudo rfkill block wifi')
 
