@@ -19,7 +19,7 @@ sudo mount -t nfs $rock64: /mnt/nfs
 # mount your internal (windows) hard drive!
 read sd < <(ls /dev | egrep sd[abcd]4)
 hdd=/dev/$sd
-mount $hdd /mnt/hdd
+sudo mount $hdd /mnt/hdd
 
 # now change into home directory and run rsync commands!
 cd /home/crowbar
