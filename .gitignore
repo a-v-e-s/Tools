@@ -2,3 +2,4 @@
 __pycache__/
 *.pyc
 bad_hosts.pkl
+visiting_hosts.pkl
