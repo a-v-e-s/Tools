@@ -39,22 +39,23 @@ def start_rock64():
 
     os.popen('sudo noip2')
     os.popen('sudo a2dissite 4v3s')
-    os.popen('sudo mount -t ext4 /dev/mmcblk1p1 /srv/ftp')
+    #os.popen('sudo mount -t ext4 /dev/mmcblk1p1 /srv/ftp')
     os.popen('sudo systemctl start ssh')
 
     try:
         print('\nTrying new mail retrieval feature!\n')
-        mail = open('/var/mail/apache', 'rb').readlines()
+        mail = open('/var/mail/apache', 'r').readlines()
         if len(mail) > 0:
             print("\nYou've got mail!")
-            envelope = os.open('/home/rock64/Mail/message', os.O_CREAT | os.O_WRONLY | os.O_APPEND)
-            os.write(envelope, mail)
-            os.close(envelope)
+            envelope = os.open('/home/rock64/Mail/message', a)
+            abyss = envelope.write(envelope, mail)
+            envelope.close()
             mail.close()
             empty = open('/var/mail/apache', 'wb')
             empty.write(b'')
             empty.close()
-        del mail
+        else:
+            mail.close()
     except Exception:
         print('\nTried to deliver mail but failed. Exception info to follow:\n')
         print(sys.exc_info())
