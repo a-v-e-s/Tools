@@ -14,6 +14,10 @@ rock64=$(
 	egrep "2a:90:45:d6:eb:3e" | \
 	cut -f 1
 )
+rock64=$(
+	echo $rock64 | \
+	cut --delimiter=' ' -f 1
+)
 sudo mount -t nfs $rock64: /mnt/nfs
 
 # mount your internal (windows) hard drive!
