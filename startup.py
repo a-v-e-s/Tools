@@ -45,9 +45,9 @@ def start_rock64():
     try:
         print('\nTrying new mail retrieval feature!\n')
         mail = open('/var/mail/apache', 'r').readlines()
-        if len(mail) > 0:
+        if len(mail) > 2:
             print("\nYou've got mail!")
-            envelope = os.open('/home/rock64/Mail/message', a)
+            envelope = os.open('/home/rock64/Mail/message', 'a')
             abyss = envelope.write(envelope, mail)
             envelope.close()
             mail.close()
