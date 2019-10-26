@@ -6,6 +6,7 @@ False if not.
 """
 
 import socket
+from sys import exc_info
 
 
 def ip4(n):
@@ -14,6 +15,10 @@ def ip4(n):
         return True
     except socket.error:
         return False
+    except ValueError:
+        print(exc_info())
+        print(n, 'was not able to be examined')
+        return False
 
 
 def ip6(n):
@@ -21,4 +26,8 @@ def ip6(n):
         socket.inet_pton(socket.AF_INET6, n)
         return True
     except socket.error:
+        return False
+    except ValueError:
+        print(exc_info())
+        print(n, 'was not able to be examined')
         return False

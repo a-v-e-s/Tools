@@ -41,7 +41,7 @@ def start_rock64():
     os.popen('sudo a2dissite 4v3s')
     #os.popen('sudo mount -t ext4 /dev/mmcblk1p1 /srv/ftp')
     os.popen('sudo systemctl start ssh')
-
+    """
     try:
         print('\nTrying new mail retrieval feature!\n')
         mail = open('/var/mail/apache', 'r').readlines()
@@ -59,7 +59,7 @@ def start_rock64():
     except Exception:
         print('\nTried to deliver mail but failed. Exception info to follow:\n')
         print(sys.exc_info())
-
+    """
     if '/usr/lib/xorg/Xorg' in subprocess.getoutput('ps -aux | grep Xorg'):
         background = os.path.join('/home/rock64/Pictures/backgrounds', random.choice(os.listdir('/home/rock64/Pictures/backgrounds')))
         command = 'feh --bg-fill ' + background
