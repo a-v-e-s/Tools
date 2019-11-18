@@ -39,7 +39,6 @@ def start_rock64():
 
     os.popen('sudo noip2')
     os.popen('sudo a2dissite 4v3s')
-    #os.popen('sudo mount -t ext4 /dev/mmcblk1p1 /srv/ftp')
     os.popen('sudo systemctl start ssh')
     """
     try:
@@ -72,6 +71,14 @@ def start_rock64():
 
     if input('\nStart nfs server for home directory? [y/n]\n').lower() == 'y':
         os.popen('sudo systemctl start nfs-kernel-server')
+    
+    if input('\nStart XMage server? [y/n]\n').lower() == 'y':
+        os.chdir('/home/rock64/XMAGE/xmage/mage-server')
+        try:
+            os.popen('java -Xms256M -Xmx512M -XX:MaxPermSize=256m -Djava.security.policy=./config/security.policy -Djava.util.logging.config.file=./config/logging.config -Dlog4j.configuration=file:./config/log4jproperties -jar lib/mage-server-1.4.39.jar')
+        except Exception:
+            print('Starting XMage server failed. Exception info to follow:')
+            print(sys.exc_info())
 
     try:
         print('\nTrying new guestbook feature!\n')
