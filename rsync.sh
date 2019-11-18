@@ -30,4 +30,7 @@ cd /home/crowbar
 sudo rsync -aAv --delete --exclude=.cache /home/crowbar /media/crowbar/'Seagate Backup Plus Drive'/backupDocs/rsync/debi
 sudo rsync -aAv --delete /mnt/nfs /media/crowbar/'Seagate Backup Plus Drive'/backupDocs/rsync/rock64
 sudo rsync -aAv --delete /mnt/hdd/Users/jdtan /media/crowbar/'Seagate Backup Plus Drive'/backupDocs/rsync/Windows
+
+umount /mnt/nfs
+umount /mnt/hdd
 echo Done!
