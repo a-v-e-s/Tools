@@ -18,18 +18,18 @@ rock64=$(
 	echo $rock64 | \
 	cut --delimiter=' ' -f 1
 )
-sudo mount -t nfs $rock64: /mnt/nfs
+mount -t nfs $rock64: /mnt/nfs
 
 # mount your internal (windows) hard drive!
 read sd < <(ls /dev | egrep sd[abcd]4)
 hdd=/dev/$sd
-sudo mount $hdd /mnt/hdd
+mount $hdd /mnt/hdd
 
 # now change into home directory and run rsync commands!
 cd /home/crowbar
-sudo rsync -aAv --delete --exclude=.cache /home/crowbar /media/crowbar/'Seagate Backup Plus Drive'/backupDocs/rsync/debi
-sudo rsync -aAv --delete /mnt/nfs /media/crowbar/'Seagate Backup Plus Drive'/backupDocs/rsync/rock64
-sudo rsync -aAv --delete /mnt/hdd/Users/jdtan /media/crowbar/'Seagate Backup Plus Drive'/backupDocs/rsync/Windows
+rsync -aAv --delete --exclude=.cache /home/crowbar /media/crowbar/'Seagate Backup Plus Drive'/backupDocs/rsync/debi
+rsync -aAv --delete /mnt/nfs /media/crowbar/'Seagate Backup Plus Drive'/backupDocs/rsync/rock64
+rsync -av --delete /mnt/hdd/Users/jdtan /media/crowbar/'Seagate Backup Plus Drive'/backupDocs/rsync/Windows
 
 umount /mnt/nfs
 umount /mnt/hdd
