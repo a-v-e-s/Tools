@@ -38,7 +38,6 @@ def start_rock64():
         os.chdir('/home/rock64/Repos/Tools')
 
     os.popen('sudo noip2')
-    os.popen('sudo a2dissite 4v3s')
     os.popen('sudo systemctl start ssh')
     os.popen('xrdb -merge /home/rock64/.Xresources')
     """
