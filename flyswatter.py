@@ -119,6 +119,53 @@ def apache(log_):
         print(x, 'was blocked from gaining access to your computer!')
 
 
+def fail2ban(log_):
+    ip_attackers = []
+    rules = open('/etc/iptables/rules.v4', 'r')
+    for x in rules:
+        if re.search('DROP', x):
+            for y in x.split():
+                if re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', y):
+                    ip_attackers.append(y[:-3])
+
+    failed_attempts = []
+    log = open(log_, 'r', encoding='utf8')
+    for x in log:
+        if re.search(r'.*?NOTICE.*?Ban\s\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', x):
+            failed_attempts.append(x)
+
+    suspects = []
+    for x in failed_attempts:
+        possible_address = x.split()[-1]
+        if ip_tester.ip4(possible_address):
+            suspects.append(possible_address)
+        elif ip_tester.ip6(possible_address):
+            suspects.append(possible_address)
+
+    just_me = []
+    for x in suspects:
+        if x.startswith('192.168.1.'):
+            print('\nFound myself!\n')
+            just_me.append(x)
+    for x in just_me:
+        suspects.remove(x)
+        print('Removed myself\n')
+
+    already_blocked = []
+    new_attackers = [ip for ip, count in collections.Counter(suspects).items() if count > 1]
+    for x in new_attackers:
+        if x in ip_attackers:
+            already_blocked.append(x)
+    for x in already_blocked:
+        new_attackers.remove(x)
+
+    print('Blocking attackers now...')
+    for x in new_attackers:
+        command = 'iptables -I INPUT -s ' + x + ' -j DROP'
+        os.popen(command)
+        print(x, 'was blocked from gaining access to your computer!')
+
+
 if __name__ == '__main__':
     if os.getuid() != 0:
         print('Try again as root!')
@@ -134,5 +181,13 @@ if __name__ == '__main__':
     os.popen('iptables-save > /etc/iptables/rules.v4')
     apache('/var/log/apache2/access.log.1')
     os.popen('iptables-save > /etc/iptables/rules.v4')
+    try:
+        fail2ban('/var/log/fail2ban.log')
+        os.popen('iptables-save > /etc/iptables/rules.v4')
+        fail2ban('/var/log/fail2ban.log.1')
+        os.popen('iptables-save > /etc/iptables/rules.v4')
+    except Exception:
+        print(sys.exc_info())
+        print('fail2ban parsing failed')
 
     print('\nSuccess!\n')
