@@ -63,6 +63,9 @@ def start_rock64():
         background = os.path.join('/home/rock64/Pictures/backgrounds', random.choice(os.listdir('/home/rock64/Pictures/backgrounds')))
         command = 'feh --bg-fill ' + background
         os.popen(command)
+        
+    if input('\nStart vsftpd [y/n]\n').lower() == 'y':
+        os.popen('sudo vsftpd')
 
     if input('\nStart Owncloud? [y/n]\n').lower() == 'y':
         os.popen('sudo a2ensite 4v3s')
