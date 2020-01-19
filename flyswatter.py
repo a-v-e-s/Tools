@@ -18,7 +18,7 @@ class Frog():
             if re.search('DROP', x):
                 for y in x.split():
                     if re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', y):
-                        known_attackers.append(y[:-3])
+                        self.known_attackers.append(y[:-3])
 
     def auth(self, log_):
         failed_attempts = []
@@ -44,15 +44,18 @@ class Frog():
                 elif ip_tester.ip6(y):
                     suspects.append(y)
 
-        suspects = remove_locals(suspects)
+        suspects = self.remove_locals(suspects)
+        print('ssh suspects:', suspects)
 
         already_blocked = []
         ssh_attackers = [ip for ip, count in collections.Counter(suspects).items() if count > 4]
-        for x in known_attackers:
+        for x in self.known_attackers:
             if x in ssh_attackers:
                 ssh_attackers.remove(x)
 
-        self.attackers.append(new_attackers)
+        print('ssh_attackers:', ssh_attackers)
+        for x in ssh_attackers:
+            self.attackers.append(x)
 
     def apache(self, log_):
         failed_attempts = []
@@ -75,15 +78,18 @@ class Frog():
                     elif ip_tester.ip6(y):
                         suspects.append(y)
     
-        suspects = remove_locals(suspects)
+        suspects = self.remove_locals(suspects)
+        print('apache suspects:', suspects)
     
         already_blocked = []
         apache_attackers = [ip for ip, count in collections.Counter(suspects).items() if count > 12]
-        for x in known_attackers:
+        for x in self.known_attackers:
             if x in apache_attackers:
                 apache_attackers.remove(x)
-    
-        self.attackers.append(new_attackers)
+        
+        print('apache_attackers:', apache_attackers)
+        for x in apache_attackers:
+            self.attackers.append(x)
     
     def fail2ban(self, log_):
         failed_attempts = []
@@ -100,15 +106,18 @@ class Frog():
             elif ip_tester.ip6(possible_address):
                 suspects.append(possible_address)
     
-        suspects = remove_locals(suspects)
+        suspects = self.remove_locals(suspects)
+        print('dos suspects:', suspects)
     
         already_blocked = []
         dos_attackers = [ip for ip, count in collections.Counter(suspects).items() if count > 1]
-        for x in known_attackers:
+        for x in self.known_attackers:
             if x in dos_attackers:
                 dos_attackers.remove(x)
     
-        self.attackers.append(new_attackers)
+        print('dos_attackers:', dos_attackers)
+        for x in dos_attackers:
+            self.attackers.append(x)
 
     def remove_locals(self, suspects):
         just_me = []
@@ -119,8 +128,12 @@ class Frog():
         for x in just_me:
             suspects.remove(x)
             print('Removed myself!\n')
+        
+        return suspects
 
     def TONGUE_OF_DOOM(self):
+        self.attackers = list(dict.fromkeys(self.attackers))
+        print('self.attackers:', self.attackers)
         print('Blocking attackers now...')
         for x in self.attackers:
             command = 'iptables -I INPUT -s ' + x + ' -j DROP'
