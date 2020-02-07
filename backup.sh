@@ -2,8 +2,6 @@
 
 # "sudo systemctl start nfs-kernel-server"  or start nfs-server with startup.py on rock64 first!
 
-mount /dev/sdc1 /media/crowbar
-
 # make sure this is being run as root:
 if [ "$EUID" -ne 0 ]; then
 	echo This script must be run as root!
@@ -29,9 +27,9 @@ mount $hdd /mnt/hdd
 
 # now change into home directory and run rsync commands!
 cd /home/crowbar
-rsync -aAv --delete --exclude=.cache /home/crowbar /media/crowbar/backupDocs/rsync/debi
-rsync -aAv --delete /mnt/nfs /media/crowbar/backupDocs/rsync/rock64
-rsync -av --delete /mnt/hdd/Users/jdtan /media/crowbar/backupDocs/rsync/Windows
+rsync -aAv --delete --exclude=.cache /home/crowbar /media/crowbar/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/debi
+rsync -aAv --delete /mnt/nfs /media/crowbar/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/rock64
+rsync -av --delete /mnt/hdd/Users/jdtan /media/crowbar/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/Windows
 
 umount /mnt/nfs
 umount /mnt/hdd
