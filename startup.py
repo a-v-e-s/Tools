@@ -10,26 +10,7 @@ if os.getuid() != 0:
 
 
 def start_blacktop():
-    os.popen('sudo rfkill block bluetooth')
-    os.popen('rm -r --interactive=never /home/crowbar/.cache/thumbnails')
-    os.popen('echo '' > /home/crowbar/.bash_history')
-    os.popen('echo '' > /home/crowbar/.sqlite_history')
-    if input('\nAirplane mode? [y/n]\n').lower() == 'y':
-        os.popen('sudo rfkill block wifi')
-
-    #print('\nTrying new feature to mount internal drive on startup!\n')
-    #if 'sda5' in subprocess.getoutput('ls /dev'):
-    #    os.popen('sudo mount /dev/sda4 /mnt/hdd')
-    #elif 'sdb5' in subprocess.getoutput('ls /dev'):
-    #    os.popen('sudo mount /dev/sdb4 /mnt/hdd')
-    #else:
-    #    print('\nCould not find and mount internal hard drive!\n')
-
-    #why don't these work??
-    #if input('\nStart pydoc? [y/n]\n').lower() == 'y':
-        #os.popen('pydoc3 -b')
-    #if input('\nStart tutanota client? [y/n]\n').lower() == 'y':
-        #os.popen('tuta')
+    print('this function is obsolete, you turd.')
 
 
 def start_rock64():
@@ -40,25 +21,7 @@ def start_rock64():
     os.popen('sudo noip2')
     os.popen('sudo systemctl start ssh')
     os.popen('xrdb -merge /home/rock64/.Xresources')
-    """
-    try:
-        print('\nTrying new mail retrieval feature!\n')
-        mail = open('/var/mail/apache', 'r').readlines()
-        if len(mail) > 2:
-            print("\nYou've got mail!")
-            envelope = os.open('/home/rock64/Mail/message', 'a')
-            abyss = envelope.write(envelope, mail)
-            envelope.close()
-            mail.close()
-            empty = open('/var/mail/apache', 'wb')
-            empty.write(b'')
-            empty.close()
-        else:
-            mail.close()
-    except Exception:
-        print('\nTried to deliver mail but failed. Exception info to follow:\n')
-        print(sys.exc_info())
-    """
+
     if '/usr/lib/xorg/Xorg' in subprocess.getoutput('ps -aux | grep Xorg'):
         background = os.path.join('/home/rock64/Pictures/backgrounds', random.choice(os.listdir('/home/rock64/Pictures/backgrounds')))
         command = 'feh --bg-fill ' + background
@@ -77,8 +40,15 @@ def start_rock64():
     
     if input('\nStart XMage server? [y/n]\n').lower() == 'y':
         os.chdir('/home/rock64/XMAGE/xmage/mage-server')
+        xmage_command = """
+            java -Xms256M -Xmx512M -XX:MaxPermSize=256m 
+            -Djava.security.policy=./config/security.policy 
+            -Djava.util.logging.config.file=./config/logging.config 
+            -Dlog4j.configuration=file:./config/log4jproperties 
+            -jar lib/mage-server-1.4.39.jar
+        """
         try:
-            os.popen('java -Xms256M -Xmx512M -XX:MaxPermSize=256m -Djava.security.policy=./config/security.policy -Djava.util.logging.config.file=./config/logging.config -Dlog4j.configuration=file:./config/log4jproperties -jar lib/mage-server-1.4.39.jar')
+            os.popen(xmage_command)
         except Exception:
             print('Starting XMage server failed. Exception info to follow:')
             print(sys.exc_info())
@@ -95,16 +65,21 @@ def start_rock64():
         sys.exit()
     else:
         try:
-            print('\nTrying new flyswatter feature!\n')
-            import flyswatter
-            flyswatter.auth('/var/log/auth.log')
-            flyswatter.apache('/var/log/apache2/access.log')
+            print('\nTrying updated flyswatter feature!\n')
+            from flyswatter import Frog
+            kermit = Frog()
+            kermit.auth('/var/log/auth.log')
+            kermit.auth('/var/log/auth.log.1')
+            kermit.apache('/var/log/apache2/access.log')
+            kermit.apache('/var/log/apache2/access.log.1')
+            kermit.fail2ban('/var/log/fail2ban.log')
+            kermit.fail2ban('/var/log/fail2ban.log.1')
+            kermit.TONGUE_OF_DOOM()
             os.popen('iptables-save > /etc/iptables/rules.v4')
             print('\nSuccess!\n')
         except Exception:
-            print('\nFlyswatter feature failed! Exception info to follow:\n')
             print(sys.exc_info())
-
+            print('\nKermit the frog has failed in his sacred duties as guardian of the CyberKingdom\n')
 
     os.popen('sudo iptables -A INPUT -s 222.186.0.0/16 -j DROP')
     os.popen('sudo iptables -A INPUT -s 222.187.0.0/16 -j DROP')
