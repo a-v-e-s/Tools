@@ -1,2 +1,4 @@
 to download a video in mp4:
 youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' --verbose
+"youtube-dl -F <address>" will show a list of available download formats with numeric codes to left\n \
+then "youtube-dl -f <numeric code> <address>" to download in that format
