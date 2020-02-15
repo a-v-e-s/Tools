@@ -9,7 +9,7 @@ import ip_tester
 
 def signin(logfile):
     try:
-        with open('/home/rock64/personal_website/guestbook.pkl', 'rb') as guestbook:
+        with open('/home/rock64/Repos/personal_website/guestbook.pkl', 'rb') as guestbook:
             guests = pickle.load(guestbook)
     except EOFError:
         if input('\nGuestbook empty. Should we start fresh? [y/n]\n').lower() == 'y':
