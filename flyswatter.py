@@ -48,7 +48,7 @@ class Frog():
         print('ssh suspects:', suspects)
 
         already_blocked = []
-        ssh_attackers = [ip for ip, count in collections.Counter(suspects).items() if count > 4]
+        ssh_attackers = [ip for ip, count in collections.Counter(suspects).items() if count > 3]
         for x in self.known_attackers:
             if x in ssh_attackers:
                 ssh_attackers.remove(x)
