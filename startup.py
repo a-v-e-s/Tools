@@ -1,8 +1,6 @@
 #!/usr/local/bin/python3
 
-import os, sys, random, subprocess, threading
-#from pull import pull
-#from tunnel import tunnel
+import os, sys, random, subprocess
 
 if os.getuid() != 0:
     print('Try again as root!')
@@ -56,7 +54,7 @@ def start_rock64():
 
 with open('/etc/hostname', 'r') as host:
     name = host.readline()
-    if 'blacktop' in name:
-        start_blacktop()
-    elif 'rock64' in name:
+    #if 'blacktop' in name:
+    #    start_blacktop()
+    if 'rock64' in name:
         start_rock64()
