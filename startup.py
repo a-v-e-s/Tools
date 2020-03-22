@@ -13,12 +13,13 @@ def start_rock64():
     import guestbook
 
     os.popen('sudo noip2')
-    os.popen('xrdb -merge /home/rock64/.Xresources')
+    os.popen('sudo runuser -u rock64 boinc')
 
     if '/usr/lib/xorg/Xorg' in subprocess.getoutput('ps -aux | grep Xorg'):
         background = os.path.join('/home/rock64/Pictures/backgrounds', random.choice(os.listdir('/home/rock64/Pictures/backgrounds')))
         command = 'feh --bg-fill ' + background
         os.popen(command)
+        os.popen('xrdb -merge /home/rock64/.Xresources')
     
     try:
         guestbook.signin('/var/log/apache2/access.log')
