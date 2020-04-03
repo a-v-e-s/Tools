@@ -14,6 +14,11 @@ if [ "$EUID" -ne 0 ]; then
 	exit 2
 fi
 
+# make sure Seagate Backup Drive is mounted:
+if ! [[ -d /media/$USER/Seagate\ Backup\ Plus\ Drive/ ]]; then
+	sudo mount /dev/sdc1 /media/$USER/
+fi
+
 # mount rock64
 ROCK64=$(
 	sudo arp-scan --localnet | \
