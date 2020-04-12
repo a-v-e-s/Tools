@@ -14,9 +14,21 @@ if [ "$EUID" -ne 0 ]; then
 	exit 2
 fi
 
+# find out who we are
+# set local $_user and $_home variables
+# necessary because `sudo bash scriptname` creates subshell where $USER=root
+# and you can't `sudo source scriptname` because source is a builtin
+if [[ -d /home/crowbar ]]; then
+	_user=crowbar
+	_home=/home/crowbar
+elif [[ -d /home/aves ]]; then 
+	_user=aves
+	_home=/home/aves
+fi
+
 # make sure Seagate Backup Drive is mounted:
-if ! [[ -d /media/$USER/Seagate\ Backup\ Plus\ Drive/ ]]; then
-	sudo mount /dev/sdc1 /media/$USER/
+if ! [[ -d /media/$_user/Seagate\ Backup\ Plus\ Drive/ ]]; then
+	sudo mount /dev/sdc1 /media/$_user/
 fi
 
 # mount rock64
@@ -55,16 +67,16 @@ else
 fi
 
 # now change into home directory and run rsync commands!
-cd $HOME
-sudo rsync -aAv --delete $HOME/Mutual /media/$USER/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync
-sudo rsync -aAv --delete /mnt/nfs /media/$USER/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/rock64
-sudo rsync -av --delete /mnt/hdd/Users/jdtan /media/$USER/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/Windows
-if [[ "$USER" == "crowbar" ]]; then
-	sudo rsync -aAv --delete --exclude=.cache --exclude=Mutual $HOME /media/$USER/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/debi
-	sudo rsync -aAv --delete --exclude=.cache /mnt/hdd2/home/aves /media/$USER/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync
-elif [[ "$USER" == "aves" ]]; then
-	sudo rsync -aAv --delete --exclude=.cache --exclude=Mutual $HOME /media/$USER/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync
-	sudo rsync -aAv --delete --exclude=.cache /mnt/hdd2/home/crowbar /media/$USER/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/debi
+cd $_home
+sudo rsync -aAv --delete $_home/Mutual /media/$_user/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync
+sudo rsync -aAv --delete /mnt/nfs /media/$_user/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/rock64
+sudo rsync -av --delete /mnt/hdd/Users/jdtan /media/$_user/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/Windows
+if [[ "$_user" == "crowbar" ]]; then
+	sudo rsync -aAv --delete --exclude=.cache --exclude=Mutual $_home /media/$_user/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/debi
+	sudo rsync -aAv --delete --exclude=.cache /mnt/hdd2/home/aves /media/$_user/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync
+elif [[ "$_user" == "aves" ]]; then
+	sudo rsync -aAv --delete --exclude=.cache --exclude=Mutual $_home /media/$_user/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync
+	sudo rsync -aAv --delete --exclude=.cache /mnt/hdd2/home/crowbar /media/$_user/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/debi
 fi
 
 sudo umount /mnt/nfs
