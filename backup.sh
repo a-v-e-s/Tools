@@ -14,6 +14,8 @@ if [ "$EUID" -ne 0 ]; then
 	exit 2
 fi
 
+set -e
+
 # find out who we are
 # set local $_user and $_home variables
 # necessary because `sudo bash scriptname` creates subshell where $USER=root
