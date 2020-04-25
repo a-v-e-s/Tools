@@ -47,29 +47,36 @@ mount -t nfs $ROCK64: /mnt/nfs
 
 # mount other storage drives in the correct locations:
 ROOT_DEV=`cat /etc/mtab | grep "sd[ab][1-5] / " | cut -d " " -f1 | cut -d "/" -f3`
-if [[ "$ROOT_DEV" == sdb2 ]]; then
-	PARROT=/mnt/hdd2
-	sudo mount /dev/sda4 /mnt/hdd
-	sudo mount /dev/sdb4 $PARROT
-elif [[ "$ROOT_DEV" == sda2 ]]; then
-	PARROT=/mnt/hdd2
-	sudo mount /dev/sdb4 /mnt/hdd
-	sudo mount /dev/sda4 $PARROT
-elif [[ "$ROOT_DEV" == sdb4 ]]; then
-	DEBIAN=/mnt/hdd2
-	sudo mount /dev/sda4 /mnt/hdd
-	sudo mount /dev/sdb2 $DEBIAN
-elif [[ "$ROOT_DEV" == sda4 ]]; then
-	DEBIAN=/mnt/hdd2
-	sudo mount /dev/sdb4 /mnt/hdd
-	sudo mount /dev/sda2 $DEBIAN
-else
-	echo "Storage drives are not at their expected locations in /dev/.\nExiting now."
-	exit 2
-fi
+case "$ROOT_DEV" in
+	sdb2)
+		PARROT=/mnt/hdd2
+		sudo mount /dev/sda4 /mnt/hdd
+		sudo mount /dev/sdb4 $PARROT
+		;;
+	sda2)
+		PARROT=/mnt/hdd2
+		sudo mount /dev/sdb4 /mnt/hdd
+		sudo mount /dev/sda4 $PARROT
+		;;
+	sdb4)
+		DEBIAN=/mnt/hdd2
+		sudo mount /dev/sda4 /mnt/hdd
+		sudo mount /dev/sdb2 $DEBIAN
+		;;
+	sda4)
+		DEBIAN=/mnt/hdd2
+		sudo mount /dev/sdb4 /mnt/hdd
+		sudo mount /dev/sda2 $DEBIAN
+		;;
+	*)
+		echo "Storage drives are not at their expected locations in /dev/.\nExiting now."
+		exit 2
+		;;
+esac
 
 # now change into home directory and run rsync commands!
 cd $_home
+set +e 		# I think unimportant rsync errors may have caused this to exit prematurely
 sudo rsync -aAv --delete $_home/Mutual /media/$_user/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync
 sudo rsync -aAv --delete /mnt/nfs /media/$_user/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/rock64
 sudo rsync -av --delete /mnt/hdd/Users/jdtan /media/$_user/Seagate\ Backup\ Plus\ Drive/backupDocs/rsync/Windows
