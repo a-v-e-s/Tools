@@ -14,7 +14,7 @@ if [ "$EUID" -ne 0 ]; then
 	exit 2
 fi
 
-set -e
+set -e # exit if there are any errors for the next few parts
 
 # find out who we are
 # set local $_user and $_home variables
