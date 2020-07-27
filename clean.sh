@@ -5,10 +5,10 @@ if [ "$EUID" -ne 0 ]; then
         exit
 fi
 
-rm -r --interactive=never /home/crowbar/.cache/thumbnails
-echo '' > /home/crowbar/.bash_history
-echo '' > /home/crowbar/.sqlite_history
-echo '' > /home/crowbar/.python_history
+rm -r --interactive=never /home/$USER/.cache/thumbnails
+echo '' > /home/$USER/.bash_history
+echo '' > /home/$USER/.sqlite_history
+echo '' > /home/$USER/.python_history
 echo '' > /root/.bash_history
 echo '' > /root/.python_history
 
