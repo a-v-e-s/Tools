@@ -1,51 +1,55 @@
 #!/bin/bash
 
-# "sudo systemctl start nfs-kernel-server"  or start nfs-server with startup.py on rock64 first!
-echo "Is nfs-kernel-server running on rock64? [y/n]"
-read REPLY
-if [[ "$REPLY" != [Yy] ]]; then
-	echo "You must first start nfs-kernel-server on your rock64!"
+# this script should be run as root:
+if [[ "$UID" -ne 0 ]];
+then
+	echo "This script must be run as root:"
+	echo "use \"su root; ./script_name.sh\","
+	echo "and not \"sudo ./script_name.sh\"."
 	exit 2
 fi
 
-# make sure this is being run as root:
-if [ "$EUID" -ne 0 ]; then
-	echo This script must be run as root!
-	exit 2
+# exit if any errors detected:
+set -e
+
+# detect & unmount encfs virtual filesystems:
+if [[ -n `df | grep encfs` ]]
+then
+	fss=`df | grep encfs | awk '{print $6}'`
+	for fs in "$fss"
+	do
+		fusermount -u "$fs"
+	done
 fi
 
-set -e # exit if there are any errors for the next few parts
+# mount windows disk and encrypted backup drive:
+win_disk=`ls /dev | grep -e sd[ab]4`
+mount /dev/$win_disk /mnt/hdd
+zuluCrypt-cli -o -d /dev/sdc2 -m Seagate -e rw -h
 
-_user=aves
-_home=/home/aves
+# sometimes rsync commands raise errors while mostly working:
+set +e
+# remember not to put "/" after end directory names, because it changes the behavior:
+rsync -aAv --delete --exclude=.cache /home/aves /run/media/private/root/Seagate/backup_docs/rsync/debi
+rsync -av --delete /mnt/hdd/Users/jdtan  /run/media/private/root/Seagate/backup_docs/rsync/windows
 
-# make sure Seagate Backup Drive is mounted:
-if ! [[ -d /media/$_user/backupDocs/ ]]; then
-	sudo mount /dev/sdc1 /media/$_user/
+# create a weekly tarball of the most important files:
+echo "Push tarball of most important files to mega? [y/n]"
+read reply
+if [[ "$reply" = y ]]
+then
+	pushd /run/media/private/root/Seagate/backup_docs
+	fn=`date +%F`_essential.tar.gz
+	tar -czvf "$fn" rsync/debi/aves/{Documents,Pictures,Music,Repos,.crypt3} \
+		rsync/windows/jdtan/Documents/My\ Games/XMage/my_files
+	echo "Enter username/email for mega.nz:"
+	read un
+	megaput "$fn" -u "$un"
+	popd
 fi
 
-# mount rock64
-ROCK64=$(
-	sudo arp-scan --localnet | \
-	egrep "2a:90:45:d6:eb:3e" | \
-	cut -f 1
-)
-ROCK64=$(
-	echo $ROCK64 | \
-	cut --delimiter=' ' -f 1
-)
+# unmount the drives:
+umount /mnt/hdd
+zuluCrypt-cli -q -d /dev/sdc2
 
-sudo mount -t nfs $ROCK64: /mnt/nfs
-sudo mount /dev/sda4 /mnt/hdd
-
-# now change into home directory and run rsync commands!
-cd $_home
-set +e 		# I think unimportant rsync errors may have caused this to exit prematurely
-sudo rsync -aAv --delete /mnt/nfs /media/$_user/backupDocs/rsync/rock64
-sudo rsync -av --delete /mnt/hdd/Users/jdtan /media/$_user/backupDocs/rsync/Windows
-sudo rsync -aAv --delete --exclude=.cache $_home /media/$_user/backupDocs/rsync/linux_blacktop
-
-sudo umount /mnt/nfs
-sudo umount /mnt/hdd
-
-echo Done!
+echo DONE!
